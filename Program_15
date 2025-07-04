@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+
+img = cv2.imread(r"D:\dataset\WhatsApp Image 2025-07-03 at 10.13.26_364d70bb.jpg")
+
+rows, cols = img.shape[:2]
+
+pts_src = np.float32([[100, 100], [400, 100], [100, 400], [400, 400]])
+pts_dst = np.float32([[80, 150], [420, 80], [150, 420], [420, 420]])
+
+A = []
+for i in range(4):
+    x, y = pts_src[i][0], pts_src[i][1]
+    u, v = pts_dst[i][0], pts_dst[i][1]
+    A.append([-x, -y, -1, 0, 0, 0, u*x, u*y, u])
+    A.append([0, 0, 0, -x, -y, -1, v*x, v*y, v])
+
+A = np.array(A)
+
+U, S, Vh = np.linalg.svd(A)
+L = Vh[-1, :] / Vh[-1, -1]
+
+H = L.reshape(3, 3)
+
+transformed_img = cv2.warpPerspective(img, H, (cols, rows))
+
+cv2.imshow("Original Image", img)
+cv2.imshow("Transformed Image using DLT", transformed_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
