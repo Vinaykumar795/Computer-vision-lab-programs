@@ -1,0 +1,18 @@
+import cv2
+
+img = cv2.imread(r"D:\dataset\WhatsApp Image 2025-07-03 at 10.13.26_364d70bb.jpg")
+
+height, width = img.shape[:2]
+
+rotate_clockwise = cv2.getRotationMatrix2D((width/2, height/2), -90, 1)
+rotated_cw = cv2.warpAffine(img, rotate_clockwise, (width, height))
+
+rotate_counterclockwise = cv2.getRotationMatrix2D((width/2, height/2), 90, 1)
+rotated_ccw = cv2.warpAffine(img, rotate_counterclockwise, (width, height))
+
+cv2.imshow("Original Image", img)
+cv2.imshow("Rotated Clockwise", rotated_cw)
+cv2.imshow("Rotated Counter-Clockwise", rotated_ccw)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
